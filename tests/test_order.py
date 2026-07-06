@@ -1,9 +1,11 @@
 import pytest
+import allure
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
 
 class TestOrder:
 
+    @allure.title("Оформление заказа через разные кнопки")
     @pytest.mark.parametrize(
         "button, name, surname, address, phone, comment",
         [
@@ -18,12 +20,7 @@ class TestOrder:
         main_page.open()
         main_page.click_cookie_accept()
 
-        if button == "top":
-            main_page.click_element_with_wait(main_page.TOP_ORDER_BUTTON)
-        elif button == "bottom":
-            element = main_page.find_element_with_wait(main_page.BOTTOM_ORDER_BUTTON)
-            driver.execute_script("arguments[0].scrollIntoView();", element)
-            main_page.click_element_with_wait(main_page.BOTTOM_ORDER_BUTTON)
+        main_page.click_order_button(button)
 
         order_page.fill_personal_info(name, surname, address, phone)
         order_page.fill_rent_info(comment)
